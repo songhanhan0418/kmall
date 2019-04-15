@@ -84,7 +84,7 @@ module.exports = {
 	],
 	devServer:{
 		contentBase: './dist',//内容的目录
-		port:8080,//服务运行的端口
+		port:3001,//服务运行的端口
 		historyApiFallback:true
 	}			
 };
