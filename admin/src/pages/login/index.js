@@ -1,9 +1,11 @@
 
 import React,{ Component } from 'react'
 //connect方法负责把store里面的数据和方法映射到UI组件
+import { connect } from 'react-redux'
+import {actionCreator} from './store'
 import axios from 'axios'
 import {
-  Form, Icon, Input, Button, Checkbox,
+  Form, Icon, Input, Button, Checkbox,message
 } from 'antd';
 
 import './index.css'
@@ -12,28 +14,15 @@ class NormalLoginForm extends Component {
   constructor(props){
   	super(props);
   	this.handleSubmit = this.handleSubmit.bind(this)
+    this.state = {
+        isFetching:false
+    }
   }
   handleSubmit(e){
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        axios({
-        	method:'post',
-        	url:'http://127.0.0.1:3000/admin/login',
-        	data:values
-        })
-        .then(result=>{
-        	if(result.data.code == 0){
-            window.location.href = '/'
-          }else if(result.data.code == 1){
-            message.error(result.data.message)
-          }
-        })
-        .catch(err=>{
-          console.log(err)
-        	message.error('网络请求失败，请稍后重试')
-        })
+        this.props.handleLogin(values)
       }
     });
   }
@@ -58,7 +47,12 @@ class NormalLoginForm extends Component {
 			  )}
 			</Form.Item>
 			<Form.Item>
-			  <Button type="primary" onClick={this.handleSubmit} className="login-form-button">
+                <Button 
+                    type="primary" 
+                    onClick={this.handleSubmit} 
+                    className="login-form-button"
+                    loading={this.props.isFetching}
+                >
 			    登录
 			  </Button>
 			</Form.Item>
@@ -72,4 +66,20 @@ const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(NormalLogin
 //1.connect方法第一个参数指定映射数据的方法
 //1.connect方法第二个参数指定映射方法的方法
 //3.返回一个方法，这个方法用来指定UI组件，这个方法会返回一个容器组件
-export default WrappedNormalLoginForm;
+const mapStateToProps = (state)=>{
+    console.log(state)
+    return {
+        isFetching:state.get('login').get('isFetching')
+    }
+}
+const mapDispatchToProps = (dispatch)=>{
+    return {
+        handleLogin:(values)=>{
+            const action =actionCreator.getLoginAction(values)
+            dispatch(action)
+        }
+    }
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(WrappedNormalLoginForm);
