@@ -15,7 +15,7 @@ class Home extends Component{
         return (
         	<div className='Home'>
         		<Layout>
-        			home page!
+        			user page!
         		</Layout>
         	</div>
 
