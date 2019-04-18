@@ -14,7 +14,7 @@ const hmac = require('../util/hmac.js')
 
 const router = Router();
 
-
+/*
 router.get("/init",(req,res)=>{
 	//插入数据到数据库
 	new UserModel({
@@ -30,6 +30,26 @@ router.get("/init",(req,res)=>{
 		}
 	})
 });
+*/
+/*
+router.get("/init",(req,res)=>{
+	//插入数据到数据库
+	const users = []
+	for(var i =1;i<=500;i++){
+		users.push({
+                username: 'test'+i,
+                password:hmac('test'+i),
+                email: 'test'+i +'@kuazhu.com',
+                phone: '13722462'+ parseInt(Math.random()*1000),
+		})
+	}
+	UserModel.insertMany(users)
+	.then(result=>{
+		res.send('okkk')
+	})
+});
+*/
+
 
 //用户登录
 router.post("/login",(req,res)=>{
