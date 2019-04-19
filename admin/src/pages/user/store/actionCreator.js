@@ -10,12 +10,12 @@ import { GET_USERS} from 'api'
 
 const getPageRequestAction = ()=>{
 	return{
-		type:types.Page_REQUEST
+		type:types.PAGE_REQUEST
 	}
 }
 const getPageDoneAction = ()=>{
 	return{
-		type:types.Page_DONE
+		type:types.PAGE_DONE
 	}
 }
 

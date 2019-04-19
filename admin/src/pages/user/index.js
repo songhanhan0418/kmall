@@ -7,25 +7,9 @@
 import { connect } from 'react-redux'
 import React,{ Component } from 'react'
 import Layout from 'common/layout'
-import { Table, Divider, Tag } from 'antd';
+import { Table, Breadcrumb  } from 'antd';
 import moment from 'moment'
 import {actionCreator} from './store'
-import './index.css'
-
-
-const dataSource = [{
-  key: '1',
-  username: 'admin',
-  isAdmin: true,
-  email: 'xxx@23.com',
-  phone: '1213213123',
-  createAt: '2019-4-17 10:10:10',
-}, {
-  key: '2',
-  name: '胡彦祖',
-  age: 42,
-  address: '西湖区湖底公园1号'
-}];
 
 const columns = [{
   title: '用户名',
@@ -70,21 +54,26 @@ class User extends Component{
         return (
         	<div className='User'>
         		<Layout>
+                    <Breadcrumb style={{ margin: '16px 0' }}>
+                        <Breadcrumb.Item>首页</Breadcrumb.Item>
+                        <Breadcrumb.Item>用户管理</Breadcrumb.Item>
+                        <Breadcrumb.Item>用户列表</Breadcrumb.Item>
+                    </Breadcrumb>
         			<Table 
-                    dataSource={dataSource} 
-                    columns={columns} 
-                    pagination={{
-                        current:current,
-                        pageSize:pageSize,
-                        total:total
-                    }}
-                    onChange={(page)=>{
-                        handlePage(page.current)
-                    }}
-                    loading={{
-                      spinning:isFetching,
-                      tip:'正在加载数据'
-                    }}
+                        dataSource={dataSource} 
+                        columns={columns} 
+                        pagination={{
+                            current:current,
+                            pageSize:pageSize,
+                            total:total
+                        }}
+                        onChange={(page)=>{
+                            handlePage(page.current)
+                        }}
+                        loading={{
+                          spinning:isFetching,
+                          tip:'正在加载数据'
+                        }}
                     />
         		</Layout>
         	</div>

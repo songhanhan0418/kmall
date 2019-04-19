@@ -156,6 +156,7 @@ router.put("/updateOrder",(req,res)=>{
 			CategoryModel
 			.getPaginationCategories(body.page,{pid:body.pid})
 			.then((result)=>{
+				console.log(result)
 				res.json({
 					code:0,
 					data:{
