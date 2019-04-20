@@ -12,6 +12,8 @@ const defaultState = fromJS({
 	pageSize:0,
 	total:0,
 	updateNameModealVisible:false,
+	updateId:'',
+	updateName:''
 })
 //1. reducer是一个函数
 //2. reducer是一个纯函数(固定的输入就有固定的输出)
@@ -42,5 +44,19 @@ export default (state=defaultState,action)=>{
 	if(action.type == types.SET_LEVEL_ONE_CATEGORIES){
 		return state.set('levelOneCategories',fromJS(action.payload))
 	}	
+	if (action.type == types.SHOW_UPDATE_NAME_MODAL) {
+		return state.merge({
+			updateNameModealVisible:true,
+			updateId:action.payload.updateId,
+			updateName:action.payload.updateName
+		})
+	}
+
+	if (action.type == types.CLOSE_UPDATE_NAME_MODAL) {
+		return state.set('updateNameModealVisible',false)
+	}
+	if (action.type == types.UPDATE_NAME_CHANGE) {
+		return state.set('updateName',action.payload)
+	}
 	return state;
 }

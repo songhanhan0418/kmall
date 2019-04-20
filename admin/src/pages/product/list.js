@@ -8,11 +8,11 @@ import {actionCreator} from './store'
 
 
 
-class CategoryList extends Component{
+class ProductList extends Component{
 
     render(){
         return (
-        	<div className='CategoryList'>
+        	<div className='ProductList'>
         		<Layout>
                     <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>首页</Breadcrumb.Item>
@@ -21,7 +21,7 @@ class CategoryList extends Component{
                     </Breadcrumb>
                     <div className='clearfix'>
                         <Link style={{float:'right'}} to={'/product/save'} >
-                            <Button type="primary" >添加分类</Button>
+                            <Button type="primary" >添加商品</Button>
                         </Link>
                     </div>
                     
@@ -42,4 +42,4 @@ const mapDispatchToProps = (dispatch)=>{
 }
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(CategoryList);
+export default connect(mapStateToProps,mapDispatchToProps)(ProductList);

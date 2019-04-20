@@ -2,7 +2,7 @@
 import * as types from './actionTypes.js'
 import { request} from 'util'
 import { message } from 'antd'
-import { GET_USERS,ADD_CATEGORY,GET_CATEGORIES,UPDATE_CATEGORY_ORDER} from 'api'
+import { GET_USERS,ADD_CATEGORY,GET_CATEGORIES,UPDATE_CATEGORY_ORDER,UPDATE_NAME_CHANGE,UPDATE_CATEGORY_NAME} from 'api'
 
 const getPageRequestAction = ()=>{
 	return{
@@ -127,6 +127,51 @@ export const getOrderAction = (pid,id,newOrder)=>{
 			}
 		})
 		.then(result=>{
+			message.success('更改顺序成功')
+			dispatch(setPageAction(result.data))
+		})	
+	}
+}
+
+
+
+export const getShowUpdateNameModalAction =(updateId,updateName)=>{
+	return {
+		type:types.SHOW_UPDATE_NAME_MODAL,
+		payload:{
+			updateId,
+			updateName
+		}
+	}
+}
+export const getCloseUpdateNameModalAction =()=>{
+	return {
+		type:types.CLOSE_UPDATE_NAME_MODAL,
+	}
+}
+export const getUpdateNameChangeAction = (payload)=>{
+	return {
+		type:types.UPDATE_NAME_CHANGE,
+		payload
+	}
+}
+
+export const getUpdateNameAction = (pid)=>{
+	return (dispatch,getState)=>{
+		const state = getState().get('category')
+		request({
+			method:'put',
+			url:UPDATE_CATEGORY_NAME,
+			data:{
+				pid:pid,
+				id:state.get('updateId'),
+				name:state.get('updateName'),
+				page:state.get('current')
+			}
+		})
+		.then(result=>{
+			message.success('更新名称成功')
+			dispatch(getCloseUpdateNameModalAction())
 			dispatch(setPageAction(result.data))
 		})	
 	}

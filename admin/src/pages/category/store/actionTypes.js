@@ -7,4 +7,4 @@ export const ADD_DONE = 'category@add_done'
 export const SET_LEVEL_ONE_CATEGORIES = 'category@set_level_one_categories'
 export const SHOW_UPDATE_NAME_MODAL = 'category@show_update_name_modal'
 export const CLOSE_UPDATE_NAME_MODAL = 'category@close_update_name_modal'
-
+export const UPDATE_NAME_CHANGE = 'category@update_name_change'
