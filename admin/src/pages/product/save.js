@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+
 import {
     Form,
     Input,
@@ -13,8 +14,11 @@ import {
 import CategorySelector from './category-selector.js'
 
 import { actionCreator } from './store'
-
+import {UPLOAD_PRODUCT_IMAGE,UPLOAD_PRODUCT_DETAIL_IMAGE} from 'api'
+import UploadImage from 'common/upload-image'
+import RichEditor from 'common/rich-editor'
 import Layout from 'common/layout'
+
 
 
 class ProductSave extends Component {
@@ -97,8 +101,19 @@ class ProductSave extends Component {
                           )}
                         </Form.Item>
                         <Form.Item label="商品图片">
+                            <UploadImage
+                                action={UPLOAD_PRODUCT_IMAGE}
+                                max = {3}
+                                getFileList={(fileList)=>{
+                                    console.log(fileList)
+                                }}
+                            />
                         </Form.Item>
                         <Form.Item label="商品描述">
+                            <RichEditor url={
+                                UPLOAD_PRODUCT_DETAIL_IMAGE
+                            } />
+
                         </Form.Item>                                                                                                                                                                     
                         <Form.Item {...tailFormItemLayout}>
                           <Button 
