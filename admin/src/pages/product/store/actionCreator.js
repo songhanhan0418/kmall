@@ -2,7 +2,110 @@
 import * as types from './actionTypes.js'
 import { request} from 'util'
 import { message } from 'antd'
-import { GET_USERS,ADD_CATEGORY,GET_CATEGORIES,UPDATE_CATEGORY_ORDER} from 'api'
+import { 
+	SAVE_PRODUCT,
+	GET_PRODUCTS,
+	UPDATE_PRODUCT_ORDER
+
+} from 'api'
+
+const setCategoryError =(payload)=>{
+	return{
+		type:types.SET_CATEGORY_ERROR
+
+	}
+}
+const setImagesError =(payload)=>{
+	return{
+		type:types.SET_IMAGES_ERROR
+
+	}
+}
+
+const getSaveRequestAction = ()=>{
+	return{
+		type:types.SAVE_REQUEST
+	}
+}
+const getSaveDoneAction = ()=>{
+	return{
+		type:types.SAVE_DONE
+	}
+}
+
+
+
+export const getSetSaveAction = (err,values)=>{
+	return (dispatch,getState)=>{
+		const state = getState().get('product')
+		const category = state.get('categoryId')
+		const images = state.get('images')
+		const detail = state.get('detail')
+		let hasError = false;
+		if(err){
+			hasError = true;
+		}
+		if(!category){
+			dispatch(setCategoryError());
+			hasError = true;
+		}
+		if(!images){
+			dispatch(setImagesError());
+			hasError = true;
+		}
+		if(hasError){
+			return;
+		}
+		dispatch(getSaveRequestAction())
+		request({
+			method:'post',
+			url:SAVE_PRODUCT,
+			data:{
+				...values,
+				category,
+				images,
+				detail
+			}
+		})
+		.then(result=>{
+			if(result.code == 0){
+				window.location.href="/product"
+			}else{
+				message.error(result.message)
+			}
+		})	
+		.finally(()=>{
+			console.log('aaaaaaaaaaaaaaaaa')
+			dispatch(getSaveDoneAction())
+		})
+
+	}
+}
+
+export const getSetCategoryIdAction = (pid,id)=>{
+	return{
+		type:types.SET_CATEGORY_ID,
+		payload:{
+			parentCategoryId:pid,
+			categoryId:id
+		}
+	}
+}
+export const getSetImagesAction = (payload)=>{
+	return{
+		type:types.SET_IMAGES,
+		payload
+	}
+}
+export const getSetDetailAction = (payload)=>{
+	return{
+		type:types.SET_DETAIL,
+		payload
+	}
+}
+
+
+
 
 const getPageRequestAction = ()=>{
 	return{
@@ -17,27 +120,6 @@ const getPageDoneAction = ()=>{
 
 
 
-const getAddRequestAction = ()=>{
-	return{
-		type:types.ADD_REQUEST
-	}
-}
-const getAddDoneAction = ()=>{
-	return{
-		type:types.ADD_DONE
-	}
-}
-
-
-
-const setLevelOneCategoriesAddAction = (payload)=>{
-	return {
-		type:types.SET_LEVEL_ONE_CATEGORIES,
-		payload
-	}
-}
-
-
 
 const setPageAction = (payload)=>{
 	return {
@@ -46,14 +128,13 @@ const setPageAction = (payload)=>{
 	}
 }
 
-export const getPageAction = (pid,page)=>{
+export const getPageAction = (page)=>{
 	return (dispatch)=>{
 		dispatch(getPageRequestAction())
 		request({
-			url:GET_CATEGORIES,
+			url:GET_PRODUCTS,
 			data:{
-				page:page,
-				pid:pid
+				page:page
 			}
 		})
 		.then(result=>{
@@ -70,63 +151,21 @@ export const getPageAction = (pid,page)=>{
 	}
 }
 
-export const getAddAction =(values)=>{
-	return (dispatch)=>{
-		dispatch(getAddRequestAction())
-		request({
-			method:'post',
-			url:ADD_CATEGORY,
-			data:values
-		})
-		.then(result=>{
-			if(result.code == 0 ){
-				if(result.data){
-					dispatch(setLevelOneCategoriesAddAction(result.data))	
-				}
-				message.success('添加分类成功')
-			}else if(result.code == 1){
-				message.error(result.message)
-			}
-		})
-		.catch(err=>{
-			message.error('添加分类失败')
-		})
-		.finally(()=>{
-			dispatch(getAddDoneAction())
-		})
-	}	
-}
-export const getLevelOneCategoriesAddAction = ()=>{
-	return (dispatch)=>{
-		request({
-			url:GET_CATEGORIES,
-			data:{
-				pid:0
-			}
-		})
-		.then(result=>{
-			console.log(result)
-			dispatch(setLevelOneCategoriesAddAction(result.data))
-		})	
-	}
-}
 
-//getOrderAction(pid,id,newOrder)
-
-export const getOrderAction = (pid,id,newOrder)=>{
+export const getUpdateOrderAction = (id,newOrder)=>{
 	return (dispatch,getState)=>{
-		const state = getState().get('category')
+		const state = getState().get('product')
 		request({
 			method:'put',
-			url:UPDATE_CATEGORY_ORDER,
+			url:UPDATE_PRODUCT_ORDER,
 			data:{
-				pid:pid,
 				id:id,
 				order:newOrder,
 				page:state.get('current')
 			}
 		})
 		.then(result=>{
+			message.success('更新排序成功')
 			dispatch(setPageAction(result.data))
 		})	
 	}

@@ -43,7 +43,7 @@ class CategoryList extends Component{
             key: 'order',
             render:(order,record,pid)=><InputNumber defaultValue={order} onBlur = {(ev)=>{
                 //console.log(ev.target.value,record.id,record.pid)
-                handleOrder(record.pid,record.id,ev.target.value)
+                handleUpdateOrde(record.pid,record.id,ev.target.value)
             }} />
         },{
             title: '操作',
@@ -79,7 +79,7 @@ class CategoryList extends Component{
         handlePage,
         id,
         newOrder,
-        handleOrder,
+        handleUpdateOrde,
         updateNameModealVisible,
         showUpdateNameModal,
         closeUpdateNameModal, 
@@ -167,8 +167,8 @@ const mapDispatchToProps = (dispatch)=>{
             const action =actionCreator.getPageAction(pid,page)
             dispatch(action)
         },
-        handleOrder:(pid,id,newOrder)=>{
-            const action =actionCreator.getOrderAction(pid,id,newOrder)
+        handleUpdateOrde:(pid,id,newOrder)=>{
+            const action =actionCreator.getUpdateOrderAction(pid,id,newOrder)
             dispatch(action)
         },
         showUpdateNameModal:(updateId,updateName)=>{

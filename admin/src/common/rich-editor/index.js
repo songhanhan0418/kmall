@@ -42,6 +42,10 @@ class RichEditor extends Component {
 				fileKey: 'upload'
 			}
 		});
+		this.simditor.on('valuechanged',()=>{
+			this.props.getRichEditorValue(this.simditor.getValue())
+		})
+
 	}
 	render(){
 		return(

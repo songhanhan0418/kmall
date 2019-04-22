@@ -4,14 +4,21 @@ import { fromJS } from 'immutable'
 import * as types from './actionTypes.js'
 
 const defaultState = fromJS({
-	isAddFetching:false,
 	isPageFetching:false,
-	levelOneCategories:[],
+	isSaveFetching:false,
 	list:[],
 	current:1,
 	pageSize:0,
 	total:0,
-	updateNameModealVisible:false,
+	parentCategoryId:'',
+	categoryId:'',
+	images:'',
+	detail:'',
+	categoryIdValidateStatus:'',
+	categoryIdHelp:'',
+	imagesValidateStatus:'',
+	imagesHelp:'',
+
 })
 //1. reducer是一个函数
 //2. reducer是一个纯函数(固定的输入就有固定的输出)
@@ -32,15 +39,55 @@ export default (state=defaultState,action)=>{
 	}
 	if(action.type == types.PAGE_DONE){
 		return state.set('isPageFetching',false)
-	}	
-	if(action.type == types.ADD_REQUEST){
-		return state.set('isAddFetching',true)
 	}
-	if(action.type == types.ADD_DONE){
-		return state.set('isAddFetching',false)
+
+
+
+
+	if(action.type == types.SET_CATEGORY_ID){
+		return state.merge({
+			parentCategoryId:action.payload.parentCategoryId,
+			categoryId:action.payload.categoryId,
+			categoryIdValidateStatus:'',
+            categoryIdHelp:'',
+			imagesValidateStatus:'',
+			imagesHelp:'',
+		})
 	}	
-	if(action.type == types.SET_LEVEL_ONE_CATEGORIES){
-		return state.set('levelOneCategories',fromJS(action.payload))
+
+
+	if(action.type == types.SET_IMAGES){
+		return state.merge({
+			images:action.payload,
+			imagesValidateStatus:'',
+			imagesHelp:'',	
+		})
 	}	
+	if(action.type == types.SET_DETAIL){
+		return state.set('detail',action.payload)
+	}	
+	if(action.type == types.SET_CATEGORY_ERROR){
+		return state.merge({
+			categoryIdValidateStatus:'error',
+			categoryIdHelp:'请选择商品分类!',
+		})
+	}	
+	if(action.type == types.SET_IMAGES_ERROR){
+		return state.merge({
+			imagesValidateStatus:'error',
+			imagesHelp:'请选择图片!',
+		})
+	}	
+	if(action.type == types.SAVE_REQUEST){
+		return state.set('isSaveFetching',true)
+	}
+	if(action.type == types.SAVE_DONE){
+		return state.set('isSaveFetching',false)
+	}
+
+
+
+
+
 	return state;
 }

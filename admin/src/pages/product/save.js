@@ -29,13 +29,21 @@ class ProductSave extends Component {
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log(values)
-            }
+            this.props.handleSave(err,values)
         });
     }
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator,getRichEditorValue } = this.props.form;
+        const { 
+            handleCategoryId,
+            handleImages,
+            handleDetail,
+            categoryIdValidateStatus,
+            categoryIdHelp,
+            imagesValidateStatus,
+            imagesHelp,
+            isSaveFetching,
+             } = this.props
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -81,44 +89,62 @@ class ProductSave extends Component {
                             <Input placeholder="商品描述" />
                           )}
                         </Form.Item>
-                        <Form.Item label="商品分类">
+                        <Form.Item 
+                            label="商品分类"
+                            validateStatus={categoryIdValidateStatus}
+                            help={categoryIdHelp}
+                            required={true}
+                        >
                             <CategorySelector getCategoryId={(pid,id)=>{
-                                console.log(pid,id)
+                                handleCategoryId(pid,id)
                             }} />
                         </Form.Item>
                         <Form.Item label="商品价格">
                           {getFieldDecorator('price', {
                             rules: [{ required: true, message: '请输入商品价格!' }],
                           })(
-                            <InputNumber  />
+                            <InputNumber 
+                                min={0}
+                             />
                           )}
                         </Form.Item>
                         <Form.Item label="商品库存">
                           {getFieldDecorator('stock', {
                             rules: [{ required: true, message: '请输入商品库存!' }],
                           })(
-                            <InputNumber  />
+                            <InputNumber 
+                                min={0}
+                             />
                           )}
                         </Form.Item>
-                        <Form.Item label="商品图片">
+                        <Form.Item 
+                            label="商品图片"
+                            validateStatus={imagesValidateStatus}
+                            help={imagesHelp}
+                            required={true}
+                        >
                             <UploadImage
                                 action={UPLOAD_PRODUCT_IMAGE}
                                 max = {3}
                                 getFileList={(fileList)=>{
-                                    console.log(fileList)
+                                    handleImages(fileList)
                                 }}
                             />
                         </Form.Item>
                         <Form.Item label="商品描述">
-                            <RichEditor url={
-                                UPLOAD_PRODUCT_DETAIL_IMAGE
-                            } />
+                            <RichEditor 
+                                url={ UPLOAD_PRODUCT_DETAIL_IMAGE } 
+                                getRichEditorValue = {(value)=>{
+                                    handleDetail(value)
+                                }}
+                            />
 
                         </Form.Item>                                                                                                                                                                     
                         <Form.Item {...tailFormItemLayout}>
                           <Button 
                             type="primary"
                             onClick={this.handleSubmit}
+                            loading={isSaveFetching}
                           >
                             提交
                           </Button>
@@ -133,13 +159,34 @@ const WrappedProductSave = Form.create()(ProductSave);
 
 const mapStateToProps = (state) => {
     return {
-
+        categoryIdValidateStatus:state.get('product').get('categoryIdValidateStatus'),
+        categoryIdHelp:state.get('product').get('categoryIdHelp'),
+        imagesValidateStatus:state.get('product').get('imagesValidateStatus'),
+        imagesHelp:state.get('product').get('imagesHelp'),
+        isSaveFetching:state.get('product').get('isSaveFetching'),
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        handleCategoryId:(pid,id)=>{
+            const action =actionCreator.getSetCategoryIdAction(pid,id)
+            dispatch(action) 
+        },
+        handleImages:(fileList)=>{
+            const action =actionCreator.getSetImagesAction(fileList)
+            dispatch(action) 
+        },    
+        handleDetail:(value)=>{
+            const action =actionCreator.getSetDetailAction(value)
+            dispatch(action) 
+        },
+        
+        handleSave:(err,values)=>{
+            const action =actionCreator.getSetSaveAction(err,values)
+            dispatch(action) 
+        }, 
+        
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedProductSave)
