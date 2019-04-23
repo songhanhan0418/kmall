@@ -6,14 +6,22 @@ import * as types from './actionTypes.js'
 const defaultState = fromJS({
 	isPageFetching:false,
 	isSaveFetching:false,
+	
 	list:[],
 	current:1,
 	pageSize:0,
 	total:0,
+	keyword:'',
+
 	parentCategoryId:'',
 	categoryId:'',
 	images:'',
 	detail:'',
+	description:'',
+	price:'',
+	name:'',
+	stock:'',
+
 	categoryIdValidateStatus:'',
 	categoryIdHelp:'',
 	imagesValidateStatus:'',
@@ -32,6 +40,7 @@ export default (state=defaultState,action)=>{
 			current:action.payload.current,
 			pageSize:action.payload.pageSize,
 			total:action.payload.total,	
+			keyword:action.payload.keyword || ''
 		})
 	}	
 	if(action.type == types.PAGE_REQUEST){
@@ -83,6 +92,18 @@ export default (state=defaultState,action)=>{
 	}
 	if(action.type == types.SAVE_DONE){
 		return state.set('isSaveFetching',false)
+	}
+	if(action.type == types.SET_PRODUCT_DETAIL){
+		return state.merge({
+			parentCategoryId:action.payload.category.pid,
+			categoryId:action.payload.category._id,
+			images:action.payload.images,
+			detail:action.payload.detail,
+			description:action.payload.description,
+			price:action.payload.price,
+			name:action.payload.name,
+			stock:action.payload.stock,
+		})
 	}
 
 

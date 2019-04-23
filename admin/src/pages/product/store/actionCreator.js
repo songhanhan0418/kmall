@@ -5,7 +5,10 @@ import { message } from 'antd'
 import { 
 	SAVE_PRODUCT,
 	GET_PRODUCTS,
-	UPDATE_PRODUCT_ORDER
+	UPDATE_PRODUCT_ORDER,
+	UPDATE_PRODUCT_STATUS,
+	GET_PRODUCT_DETAIL,
+	SEARCH_PRODUCTS
 
 } from 'api'
 
@@ -35,7 +38,7 @@ const getSaveDoneAction = ()=>{
 
 
 
-export const getSetSaveAction = (err,values)=>{
+export const getSaveAction  = (err,values)=>{
 	return (dispatch,getState)=>{
 		const state = getState().get('product')
 		const category = state.get('categoryId')
@@ -56,9 +59,13 @@ export const getSetSaveAction = (err,values)=>{
 		if(hasError){
 			return;
 		}
+		let method = 'post'
+		if(values.id){
+			method = 'put'
+		}
 		dispatch(getSaveRequestAction())
 		request({
-			method:'post',
+			method:method,
 			url:SAVE_PRODUCT,
 			data:{
 				...values,
@@ -152,6 +159,29 @@ export const getPageAction = (page)=>{
 }
 
 
+export const getSearchAction = (keyword,page)=>{
+	return (dispatch)=>{
+		request({
+			url:SEARCH_PRODUCTS,
+			data:{
+				keyword:keyword,
+				page:page
+			}
+		})
+		.then(result=>{
+			console.log('aaaaaaaaaaaaaaa')
+			if(result.code == 0){
+							console.log('bbbbbbbbbbbbb')
+				dispatch(setPageAction(result.data))
+			}else if(result.code == 1){
+				message.error(result.message)
+			}
+		})
+	}
+}
+
+
+
 export const getUpdateOrderAction = (id,newOrder)=>{
 	return (dispatch,getState)=>{
 		const state = getState().get('product')
@@ -168,5 +198,50 @@ export const getUpdateOrderAction = (id,newOrder)=>{
 			message.success('更新排序成功')
 			dispatch(setPageAction(result.data))
 		})	
+	}
+}
+export const getUpdateStatusAction = (id,newStatus)=>{
+	return (dispatch,getState)=>{
+		const state = getState().get('product')
+		request({
+			method:'put',
+			url:UPDATE_PRODUCT_STATUS,
+			data:{
+				id:id,
+				status:newStatus,
+				page:state.get('current')
+			}
+		})
+		.then(result=>{
+			message.success('更新状态成功')
+			dispatch(setPageAction(result.data))
+		})	
+	}
+}
+
+const setProductDetailAction = (payload)=>{
+	return{
+		type:types.SET_PRODUCT_DETAIL,
+		payload
+	}
+}
+
+export const getProductDetailAction = (productId)=>{
+	return (dispatch,getState)=>{
+		request({
+			url:GET_PRODUCT_DETAIL,
+			data:{
+				id:productId,
+			}
+		})
+		.then(result=>{
+			if(result.code == 0){
+				console.log(result.data)
+				dispatch(setProductDetailAction(result.data))
+			}
+		})	
+		.catch(err=>{
+			console.log(err)
+		})
 	}
 }

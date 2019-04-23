@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+
 import {
     Form,
     Input,
@@ -14,17 +15,16 @@ import {
 import CategorySelector from './category-selector.js'
 
 import { actionCreator } from './store'
-import {UPLOAD_PRODUCT_IMAGE,UPLOAD_PRODUCT_DETAIL_IMAGE} from 'api'
-import UploadImage from 'common/upload-image'
-import RichEditor from 'common/rich-editor'
+
 import Layout from 'common/layout'
+import './detail.css'
 
 
 
-class ProductSave extends Component {
+class ProductDetail extends Component {
     constructor(props) {
         super(props);
-        this.handleSubmit = this.handleSubmit.bind(this)
+        
         this.state={
             productId:this.props.match.params.productId
         }
@@ -34,24 +34,10 @@ class ProductSave extends Component {
             this.props.handleProductDetail(this.state.productId)
         }
     }
-    handleSubmit(e) {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            values.id = this.state.productId
-            this.props.handleSave(err,values)
-        });
-    }
+
     render() {
         const { getFieldDecorator,getRichEditorValue } = this.props.form;
         const { 
-            handleCategoryId,
-            handleImages,
-            handleDetail,
-            categoryIdValidateStatus,
-            categoryIdHelp,
-            imagesValidateStatus,
-            imagesHelp,
-            isSaveFetching,
             parentCategoryId,
             categoryId,
             images,
@@ -61,14 +47,9 @@ class ProductSave extends Component {
             name,
             stock,
              } = this.props
-        let fileList = [];
+        let imgBox = '';
         if(images){
-            fileList = images.split(',').map((url,index)=>({
-                uid:index,
-                status: 'done',
-                url:url,
-                response:url
-            }))
+            imgBox = images.split(',').map((url,index)=><li key={index}><img src={url} /></li>)
         }
         const formItemLayout = {
             labelCol: {
@@ -93,12 +74,12 @@ class ProductSave extends Component {
             },
         };
         return (
-            <div className="ProductSave">
+            <div className="ProductDetail">
                 <Layout>
                     <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>首页</Breadcrumb.Item>
                         <Breadcrumb.Item>商品管理</Breadcrumb.Item>
-                        <Breadcrumb.Item>添加商品</Breadcrumb.Item>
+                        <Breadcrumb.Item>查看商品</Breadcrumb.Item>
                     </Breadcrumb>
                     <Form {...formItemLayout}>
                         <Form.Item label="商品名称">
@@ -106,7 +87,7 @@ class ProductSave extends Component {
                                 rules: [{ required: true, message: '请输入商品名称!' }],
                                 initialValue:name
                             })(
-                                <Input placeholder="商品名称" />
+                                <Input disabled={true} />
                             )}
                         </Form.Item>
                         <Form.Item label="商品描述">
@@ -114,21 +95,17 @@ class ProductSave extends Component {
                                 rules: [{ required: true, message: '请输入商品描述!' }],
                                 initialValue:description
                             })(
-                            <Input placeholder="商品描述" />
+                            <Input disabled={true} />
                           )}
                         </Form.Item>
                         <Form.Item 
                             label="商品分类"
                             validateStatus={categoryIdValidateStatus}
-                            help={categoryIdHelp}
-                            required={true}
                         >
                             <CategorySelector 
-                                getCategoryId={(pid,id)=>{
-                                    handleCategoryId(pid,id)
-                                }}
                                 parentCategoryId={parentCategoryId}
                                 categoryId={categoryId}
+                                disabled={true}
                              />
                         </Form.Item>
                         <Form.Item label="商品价格">
@@ -137,7 +114,7 @@ class ProductSave extends Component {
                                 initialValue:price
                             })(
                             <InputNumber 
-                                min={0}
+                                disabled={true}
                              />
                             )}
                         </Form.Item>
@@ -147,33 +124,20 @@ class ProductSave extends Component {
                                 initialValue:stock
                             })(
                             <InputNumber 
-                                min={0}
+                                disabled={true}
                              />
                             )}
                         </Form.Item>
                         <Form.Item 
                             label="商品图片"
-                            validateStatus={imagesValidateStatus}
-                            help={imagesHelp}
                             required={true}
                         >
-                            <UploadImage
-                                action={UPLOAD_PRODUCT_IMAGE}
-                                max = {3}
-                                getFileList={(fileList)=>{
-                                    handleImages(fileList)
-                                }}
-                                fileList = {fileList}
-                            />
+                            <ul>{imgBox}</ul>
                         </Form.Item>
                         <Form.Item label="商品描述">
-                            <RichEditor 
-                                url={ UPLOAD_PRODUCT_DETAIL_IMAGE } 
-                                getRichEditorValue = {(value)=>{
-                                    handleDetail(value)
-                                }}
-                                detail={detail}
-                            />
+                            <div>
+                            {detail}
+                            </div>
 
                         </Form.Item>                                                                                                                                                                     
                         <Form.Item {...tailFormItemLayout}>
@@ -191,15 +155,11 @@ class ProductSave extends Component {
         )
     }
 }
-const WrappedProductSave = Form.create()(ProductSave);
+const WrappedProductDetail = Form.create()(ProductDetail);
 
 const mapStateToProps = (state) => {
     return {
-        categoryIdValidateStatus:state.get('product').get('categoryIdValidateStatus'),
-        categoryIdHelp:state.get('product').get('categoryIdHelp'),
-        imagesValidateStatus:state.get('product').get('imagesValidateStatus'),
-        imagesHelp:state.get('product').get('imagesHelp'),
-        isSaveFetching:state.get('product').get('isSaveFetching'),
+
         parentCategoryId:state.get('product').get('parentCategoryId'),
         categoryId:state.get('product').get('categoryId'),
         images:state.get('product').get('images'),
@@ -213,23 +173,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleCategoryId:(pid,id)=>{
-            const action =actionCreator.getSetCategoryIdAction(pid,id)
-            dispatch(action) 
-        },
-        handleImages:(fileList)=>{
-            const action =actionCreator.getSetImagesAction(fileList)
-            dispatch(action) 
-        },    
-        handleDetail:(value)=>{
-            const action =actionCreator.getSetDetailAction(value)
-            dispatch(action) 
-        },
-        
-        handleSave:(err,values)=>{
-            const action =actionCreator.getSaveAction (err,values)
-            dispatch(action) 
-        },
         handleProductDetail:(productId)=>{
             const action =actionCreator.getProductDetailAction(productId)
             dispatch(action) 
@@ -237,4 +180,4 @@ const mapDispatchToProps = (dispatch) => {
         
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(WrappedProductSave)
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedProductDetail)
