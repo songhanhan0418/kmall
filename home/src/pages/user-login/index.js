@@ -1,3 +1,18 @@
-require ('../common/index.js')
+
+require ('pages/common/footer')
+require ('pages/common/logo')
 require ('./index.css')
-console.log('user-login')
+
+
+var page = {
+	init:function(){
+		this.bindEvent();
+	},
+	bindEvent:function(){
+		$('#btn-submit').on('click',function(){
+
+		})
+	},
+	
+}
+

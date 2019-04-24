@@ -100,7 +100,7 @@ class ProductDetail extends Component {
                         </Form.Item>
                         <Form.Item 
                             label="商品分类"
-                            validateStatus={categoryIdValidateStatus}
+                            required={true}
                         >
                             <CategorySelector 
                                 parentCategoryId={parentCategoryId}
@@ -132,23 +132,12 @@ class ProductDetail extends Component {
                             label="商品图片"
                             required={true}
                         >
-                            <ul>{imgBox}</ul>
+                            <ul className='imgBox'>{imgBox}</ul>
                         </Form.Item>
                         <Form.Item label="商品描述">
-                            <div>
-                            {detail}
+                            <div dangerouslySetInnerHTML={{__html:detail}}>
                             </div>
-
                         </Form.Item>                                                                                                                                                                     
-                        <Form.Item {...tailFormItemLayout}>
-                            <Button 
-                                type="primary"
-                                onClick={this.handleSubmit}
-                                loading={isSaveFetching}
-                            >
-                            提交
-                            </Button>
-                        </Form.Item>
                     </Form>                  
                 </Layout>
             </div>
@@ -159,7 +148,6 @@ const WrappedProductDetail = Form.create()(ProductDetail);
 
 const mapStateToProps = (state) => {
     return {
-
         parentCategoryId:state.get('product').get('parentCategoryId'),
         categoryId:state.get('product').get('categoryId'),
         images:state.get('product').get('images'),

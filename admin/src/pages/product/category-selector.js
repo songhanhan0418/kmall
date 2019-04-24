@@ -128,7 +128,7 @@ class CategorySelector extends Component{
 					style={{ width: 200 ,marginRight:10}}
 					onChange={this.handleLevelOneChange}
 					value = {levelOneId}
-					disabled={true}
+					disabled={disabled}
                 >
                 	{levelOneOptions}
                 </Select>
@@ -138,7 +138,7 @@ class CategorySelector extends Component{
 		                	style={{ width: 200 }}
 		                	onChange={this.handleLevelTwoChange}
 		                	value = {levelTwoId}
-		                	disabled={true}
+		                	disabled={disabled}
 		                >
 		                	{levelTwoOptions}
 		                </Select>  

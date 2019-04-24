@@ -23,9 +23,9 @@ class ProductList extends Component{
             key: 'name',
             render:name=>{
                 if(keyword){
-                    const reg = new RegExp('('+keyword+')'+'ig')
-                    const html = name.replace(reg,"<b style='color:red'>$1</b>")
-                    return <span dangerouslySetInnerHtml={{__html:html}}></span>
+                    const reg = new RegExp('('+keyword+')','ig');
+                    const html = name.replace(reg,"<b style='color:red'>$1</b>");                    
+                    return <span dangerouslySetInnerHTML={{__html:html}}></span>
                 }else{
                     return name
                 }

@@ -169,9 +169,7 @@ export const getSearchAction = (keyword,page)=>{
 			}
 		})
 		.then(result=>{
-			console.log('aaaaaaaaaaaaaaa')
 			if(result.code == 0){
-							console.log('bbbbbbbbbbbbb')
 				dispatch(setPageAction(result.data))
 			}else if(result.code == 1){
 				message.error(result.message)
