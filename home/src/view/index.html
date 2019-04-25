@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 	<%=require('html-loader!./common/meta.html') %>
-	<title>Document</title>
+	<title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 <body>
 	<%=require('html-loader!./common/nav.html') %>
+	<%=require('html-loader!./common/search.html') %>
 	<%=require('html-loader!./common/footer.html') %>
 </body>
 </html>

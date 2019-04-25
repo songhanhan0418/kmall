@@ -29,19 +29,22 @@ var page = {
 	bindEvent:function(){
 		const _this = this;
 		$('#btn-submit').on('click',function(){
-			_this.submitLogin()
+			_this.submitRegister()
 		})
 		$('input').on('keyup',function(ev){
 			if(ev.keyCode == 13){
-				_this.submitLogin()
+				_this.submitRegister()
 			}
 		})
 	},
-	submitLogin:function(){
+	submitRegister:function(){
 		//1.获取数据
 		var	formData = {
 			username:$.trim($('[name="username"]').val()),
 			password:$.trim($('[name="password"]').val()),
+			repassword:$.trim($('[name="repassword"]').val()),
+			phone:$.trim($('[name="phone"]').val()),
+			email:$.trim($('[name="email"]').val()),
 		}
 		//2.验证数据
 		var validateResult = this.validate(formData)
@@ -85,9 +88,31 @@ var page = {
 			result.msg = '密码格式不对';
 			return result;
 		}
-
-
-
+		//两次密码不一致
+		if(formData.password != formData.repassword){
+			result.msg = '两次密码不一致';
+			return result;
+		}
+		//手机号码不能为空
+		if(!_util.validate(formData.phone,'require')){
+			result.msg = '手机号码不能为空'
+			return result;
+		}
+		//手机号码格式不正确
+		if(!_util.validate(formData.phone,'phone')){
+			result.msg = '手机号码格式不正确'
+			return result;
+		}
+		//邮箱不能为空
+		if(!_util.validate(formData.email,'require')){
+			result.msg = '邮箱不能为空'
+			return result;
+		}
+		//邮箱格式不正确
+		if(!_util.validate(formData.email,'email')){
+			result.msg = '邮箱格式不正确'
+			return result;
+		}
 		result.status=true;
 		return result
 	}

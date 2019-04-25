@@ -33,6 +33,33 @@ var _util ={
 	},
 	goLogin:function(){
 		window.location.href = './user-login.html'
+	},
+	goHome:function(){
+		window.location.href = '/'
+	},
+	validate(value,type){
+
+		var value = $.trim(value);
+
+		if(type == 'require'){
+			return !!value
+		}
+		//用户名格式
+		if(type == 'username'){
+			return /^[a-zA-Z0-9_]{3,6}$/.test(value)
+		}
+		//密码格式
+		if(type == 'password'){
+			return /^[a-zA-Z0-9_]{3,6}$/.test(value)
+		}
+		//手机格式
+		if(type == 'phone'){
+			return /^1[35789]\d{9}$/.test(value)
+		}
+		//邮箱格式
+		if(type == 'email'){
+			return /^\w+@\w+\.\w{2,6}$/.test(value);
+		}
 	}
 
 }
