@@ -120,3 +120,11 @@ body{
 .form-box .link-item{
 	text-align: right;
 }	
+
+.crumb{
+	height: 40px;
+	line-height: 40px;
+	margin-bottom: 10px;
+	color: #888;
+	font-size: 14px;
+}

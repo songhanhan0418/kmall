@@ -4,28 +4,26 @@ var _util = require('util')
 var nav = {
 	init:function(){
 		this.bindEvent();
-		this.loadUsername();
-		return this;
 	},
 	bindEvent:function(){
+		var _this = this
 		//绑定退出事件
-		$('#logout').on('click',function(){
-			_user.logout(function(result){
-				window.location.reload()
-			},function(msg){
-				_util.showErrorMsg(msg)
-			})
+		$('#btn-search').on('click',function(){
+			_this.submitSearch()
+		})
+		$('input').on('keyup',function(ev){
+			if(ev.keyCode == 13){
+				_this.submitSearch()
+			}
 		})
 	},
-	loadUsername:function(){
-		_user.getUsername(function(data){
-			$('.not-login').hide()
-			$('.login')
-			.show()
-			.find('.username')
-			.text(data.username)
-		})
+	submitSearch:function(){
+		var keyword = $('#search-input').val()
+		window.location.href = './list.html?keyword='+keyword
 	}
 }
 
-module.exports =nav.init();
+$(function(){
+	nav.init()
+})
+

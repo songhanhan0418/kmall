@@ -1,18 +1,26 @@
 
 require ('pages/common/nav')
 require ('pages/common/search')
+require ('pages/common/side')
 require ('pages/common/footer')
-require ('pages/common/logo')
 require ('./index.css')
+
+var _side = require ('pages/common/side')
 var _util = require ('util')
 var _user = require('service/user')
 
 var page = {
 	init:function(){
-		this.bindEvent();
+		this.onload();
+		this.loadUserInfo();
 	},
-	bindEvent:function(){
-
+	onload:function(){
+		_side.render('user-center')
+	},
+	loadUserInfo:function(){
+		_user.getUserInfo(function(user){
+			
+		})
 	}
 }
 $(function(){

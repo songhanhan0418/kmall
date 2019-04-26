@@ -28,6 +28,23 @@ var page = {
 	},
 	bindEvent:function(){
 		const _this = this;
+		//验证用户名是否存在
+		$('[name="username"]').on('blur',function(){
+			var username = $(this).val();
+			if(!_util.validate(username,'require')){
+				return;
+			}
+			if(!_util.validate(username,'username')){
+				return;
+			}
+			_user.checkUsername(username,function(){
+				formErr.hide()
+			},function(msg){
+				formErr.show(msg)
+			})
+		})
+
+		//用户注册
 		$('#btn-submit').on('click',function(){
 			_this.submitRegister()
 		})
@@ -52,8 +69,8 @@ var page = {
 		//验证通过
 		if(validateResult.status){
 			formErr.hide()
-			_user.login(formData,function(){
-				_util.goHome()
+			_user.register(formData,function(){
+				window.location.href = './result.html?type=register'
 			},function(msg){
 				formErr.show(msg)
 			})

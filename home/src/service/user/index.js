@@ -19,6 +19,15 @@ var _user = {
 			error:error
 		})
 	},
+	register:function(data,success,error){
+		_util.request({
+			method:'post',
+			url:'/user/register',
+			data:data,
+			success:success,
+			error:error
+		})
+	},
 	getUsername:function(success,error){
 		_util.request({
 			url:'/user/username',
@@ -26,7 +35,14 @@ var _user = {
 			error:error
 		})
 	},
-	checkUsername:function(){
+	getUserInfo:function(success,error){
+		_util.request({
+			url:'/user/userInfo',
+			success:success,
+			error:error
+		})
+	},
+	checkUsername:function(username,success,error){
 		_util.request({
 			url:'/user/checkUsername',
 			data:{

@@ -33,3 +33,11 @@
 	line-height: 42px;
 	float: left;
 }
+.crumb{
+	height: 40px;
+	line-height: 40px;
+	margin-bottom: 10px;
+	color: #888;
+	font-size: 14px;
+}
+

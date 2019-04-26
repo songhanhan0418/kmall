@@ -1,3 +1,7 @@
+
+
+var Hogan = require('hogan.js')
+
 var _util ={
 	request:function(options){
 		var _this = this
@@ -36,6 +40,18 @@ var _util ={
 	},
 	goHome:function(){
 		window.location.href = '/'
+	},
+	getParamFromUrl:function(key){
+		var query = window.location.search.substr(1)
+		var reg = new RegExp('(^|&)'+key+'=([^&]*)(&|$)')
+		var result = query.match(reg )
+		return result ?  decodeURIComponent(result[2]) : null
+	},
+	render:function(tpl,data){
+
+		var template = Hogan.compile(tpl);
+		var output = template.render(data);
+		return output;
 	},
 	validate(value,type){
 

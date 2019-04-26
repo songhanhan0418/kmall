@@ -29,8 +29,8 @@ module.exports = {
 	//单入口写法一
 	entry:{
 		//chunk名称:文件路径
-		'index':'./src/pages/index/index.js',		
-		'common':'./src/pages/common/index.js',		
+		'common':'./src/pages/common/index.js',	
+		'index':'./src/pages/index/index.js',
 		'user-login':'./src/pages/user-login/index.js',			
 		'user-register':'./src/pages/user-register/index.js',			
 		'user-center':'./src/pages/user-center/index.js',			
@@ -95,6 +95,12 @@ module.exports = {
 			            presets: ['env','es2015','stage-3'],
 			           
 			        }
+			    }               
+			},
+			{
+			    test:/\.tpl$/,
+			    use: {
+			        loader: 'html-loader',
 			    }               
 			}							
 		]
