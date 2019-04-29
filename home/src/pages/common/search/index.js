@@ -11,7 +11,7 @@ var nav = {
 		$('#btn-search').on('click',function(){
 			_this.submitSearch()
 		})
-		$('input').on('keyup',function(ev){
+		$('.search-box input').on('keyup',function(ev){
 			if(ev.keyCode == 13){
 				_this.submitSearch()
 			}

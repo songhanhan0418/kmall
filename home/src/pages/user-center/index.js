@@ -8,6 +8,7 @@ require ('./index.css')
 var _side = require ('pages/common/side')
 var _util = require ('util')
 var _user = require('service/user')
+var tpl = require('./index.tpl')
 
 var page = {
 	init:function(){
@@ -19,7 +20,10 @@ var page = {
 	},
 	loadUserInfo:function(){
 		_user.getUserInfo(function(user){
-			
+			var html = _util.render(tpl,{
+				user:user
+			})
+			$('.side-content').html(html)
 		})
 	}
 }

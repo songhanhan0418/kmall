@@ -51,6 +51,15 @@ var _user = {
 			success:success,
 			error:error
 		})
-	}
+	},
+	updatePassword:function(data,success,error){
+		_util.request({
+			method:'put',
+			url:'/user/updatePassword',
+			data:data,
+			success:success,
+			error:error
+		})
+	},
 }
 module.exports = _user
